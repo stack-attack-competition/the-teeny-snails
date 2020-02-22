@@ -5,6 +5,12 @@ defmodule Repository do
     Store.fetch(type)
   end
 
+  def delete(type, key) do
+    dataSet = Store.fetch(type)
+    Map.delete(dataSet, key)
+    Store.set(type, dataSet)
+  end
+
   def add(type, resource) do
     case Store.get(type) do
       {:not_found} -> not_found_add(type, resource)
