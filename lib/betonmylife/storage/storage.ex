@@ -69,7 +69,6 @@ defmodule Betonmylife.Store do
   def handle_call({:get, key}, _from, state) do
     %{ets_table_name: ets_table_name} = state
     result = :ets.lookup(ets_table_name, key)
-    IO.inspect result
     {:reply, result, state}
   end
 

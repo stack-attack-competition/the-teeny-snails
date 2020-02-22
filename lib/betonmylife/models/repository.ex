@@ -5,6 +5,11 @@ defmodule Repository do
     Store.fetch(type)
   end
 
+  def update(type, uuid, resource) do
+    dataSet = Store.fetch(type)
+    current = Map.get(dataSet, uuid)
+  end
+
   def delete(type, key) do
     dataSet = Store.fetch(type)
     Map.delete(dataSet, key)
