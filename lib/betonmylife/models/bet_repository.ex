@@ -1,8 +1,16 @@
 defmodule Betonmylife.BetRepository do
   alias Betonmylife.Store
 
-  def add(bet) do
-    Repository.add(:bet, bet)
+  def update(uuid, data) do
+    case Store.get(:bet) do
+      {:found, bets} ->
+        bet = Map.get(bets, uuid)
+        new = Bet.update(bet, data)
+        newBets = Map.replace!(bets, uuid, new)
+        Store.set(:bet, newBets)
+        {:ok, new}
+      _ -> {:error}
+    end
   end
 
   def fetchById(uuid) do
@@ -10,13 +18,5 @@ defmodule Betonmylife.BetRepository do
       {:found, bet} -> Map.get(bet, uuid)
       _ -> nil
     end
-  end
-
-  def fetchAll() do
-    Repository.fetchAll(:bet)
-  end
-
-  def delete(key) do
-    Repository.delete(:bet, key)
   end
 end

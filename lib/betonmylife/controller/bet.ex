@@ -10,7 +10,7 @@ defmodule Betonmylife.Bet do
 
 
   get "/" do
-    send_resp(conn, 200, Poison.encode!(BetRepository.fetchAll()))
+    send_resp(conn, 200, Poison.encode!(Repository.fetchAll(:bet)))
   end
 
   get "/:uuid" do
@@ -20,28 +20,22 @@ defmodule Betonmylife.Bet do
 
   post "/" do
     bet = Bet.from_dto(BetDto.from_map(conn.body_params))
-    BetRepository.add(bet)
+    Repository.add(:bet, bet)
     send_resp(conn, 200, Poison.encode!(bet))
   end
 
   patch "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    betDto = BetDto.from_map(conn.body_params)
-    case Store.get(:bet) do
-      {:found, bets} ->
-        bet = Map.get(bets, uuid)
-        new = Bet.update(bet, betDto)
-#        IO.inspect new
-        newBets = Map.replace!(bets, uuid, new)
-        Store.set(:bet, newBets)
-        send_resp(conn, 200, Poison.encode!(new))
-      _ -> send_resp(conn, 400, "dunno")
+    data = BetDto.from_map(conn.body_params)
+    case BetRepository.update(uuid, data) do
+      {:ok, result} -> send_resp(conn, 200, Poison.encode!(result))
+      {:error} -> send_resp(conn, 400, "error")
     end
   end
 
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    BetRepository.delete(uuid)
+    Repository.delete(:bet, uuid)
     send_resp(conn, 200, "Succes")
   end
 
