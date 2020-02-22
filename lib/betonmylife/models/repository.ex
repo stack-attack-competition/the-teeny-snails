@@ -12,6 +12,11 @@ defmodule Repository do
     end
   end
 
+  def update(type, uuid, resource) do
+    dataSet = Store.fetch(type)
+    current = Map.get(dataSet, uuid)
+  end
+
   def delete(type, key) do
     case Store.get(type) do
       {:not_found} -> {:not_found}

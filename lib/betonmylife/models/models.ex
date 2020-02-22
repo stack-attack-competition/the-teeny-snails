@@ -8,6 +8,53 @@ defmodule Challenge do
   endDate: "",
   outcome: false,
   proofUrl: ""
+
+  def from_dto(dto) do
+    %Challenge{
+      id: UUID.uuid4(),
+      author: dto.author,
+      title: dto.title,
+      description: dto.description,
+      isActive: dto.isActive,
+      endDate: dto.endDate,
+      outcome: dto.outcome,
+      proofUrl: dto.proofUrl
+    }
+  end
+
+  def update(current, dto) do
+    cond do
+      dto.author != nil ->
+        current = struct(current, author: dto.author)
+        dto = struct(dto, author: nil)
+        update(current, dto)
+      dto.title != nil ->
+        current = struct(current, title: dto.title)
+        dto = struct(dto, title: nil)
+        update(current, dto)
+      dto.description != nil ->
+        current = struct(current, description: dto.description)
+        dto = struct(dto, description: nil)
+        update(current, dto)
+      dto.isActive != nil ->
+        current = struct(current, isActive: dto.isActive)
+        dto = struct(dto, isActive: nil)
+        update(current, dto)
+      dto.endDate != nil ->
+        current = struct(current, endDate: dto.endDate)
+        dto = struct(dto, endDate: nil)
+        update(current, dto)
+      dto.outcome != nil ->
+        current = struct(current, outcome: dto.outcome)
+        dto = struct(dto, outcome: nil)
+        update(current, dto)
+      dto.proofUrl != nil ->
+        current = struct(current, proofUrl: dto.proofUrl)
+        dto = struct(dto, proofUrl: nil)
+        update(current, dto)
+      true -> current
+    end
+  end
 end
 
 defmodule User do
@@ -29,6 +76,32 @@ defmodule User do
       pictureUrl: dto.pictureUrl
     }
   end
+
+  def update(current, dto) do
+    cond do
+      dto.email != nil ->
+        current = struct(current, email: dto.email)
+        dto = struct(dto, email: nil)
+        update(current, dto)
+      dto.password != nil ->
+        current = struct(current, password: dto.password)
+        dto = struct(dto, password: nil)
+        update(current, dto)
+      dto.firstName != nil ->
+        current = struct(current, firstName: dto.firstName)
+        dto = struct(dto, firstName: nil)
+        update(current, dto)
+      dto.lastName != nil ->
+        current = struct(current, lastName: dto.lastName)
+        dto = struct(dto, lastName: nil)
+        update(current, dto)
+      dto.pictureUrl != nil ->
+        current = struct(current, pictureUrl: dto.pictureUrl)
+        dto = struct(dto, pictureUrl: nil)
+        update(current, dto)
+      true -> current
+    end
+  end
 end
 
 defmodule Bet do
@@ -39,6 +112,43 @@ defmodule Bet do
   inFavor: "",
   amount: 0,
   result: 0
+
+  def from_dto(dto) do
+    %Bet{
+      id: UUID.uuid4(),
+      amount: dto.amount,
+      author: dto.author,
+      challenge: dto.challenge,
+      inFavor: dto.inFavor,
+      result: dto.result
+    }
+  end
+
+  def update(current, dto) do
+    cond do
+      dto.amount != nil ->
+        current = struct(current, amount: dto.amount)
+        dto = struct(dto, amount: nil)
+        update(current, dto)
+      dto.author != nil ->
+        current = struct(current, author: dto.author)
+        dto = struct(dto, author: nil)
+        update(current, dto)
+      dto.challenge != nil ->
+        current = struct(current, challenge: dto.challenge)
+        dto = struct(dto, challenge: nil)
+        update(current, dto)
+      dto.inFavor != nil ->
+        current = struct(current, inFavor: dto.inFavor)
+        dto = struct(dto, inFavor: nil)
+        update(current, dto)
+      dto.result != nil ->
+        current = struct(current, result: dto.result)
+        dto = struct(dto, result: nil)
+        update(current, dto)
+      true -> current
+    end
+  end
 end
 
 # Dto definitions

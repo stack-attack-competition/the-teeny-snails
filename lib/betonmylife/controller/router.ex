@@ -14,8 +14,6 @@ defmodule Betonmylife.Router do
 
   post "/asd" do
     bet = BetDto.from_map(conn.body_params)
-    IO.inspect conn.body_params
-    IO.inspect bet
     send_resp(conn, 200, "Success!")
   end
 

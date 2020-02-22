@@ -1,4 +1,6 @@
 defmodule Betonmylife.BetRepository do
+  alias Betonmylife.Store
+
   def add(bet) do
     Repository.add(:bet, bet)
   end
