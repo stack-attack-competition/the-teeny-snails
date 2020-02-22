@@ -3,7 +3,12 @@ defmodule Betonmylife.UserStore do
 
   def fetch(email, password) do
     users = Store.fetch(:user)
-    Enum.map(users, fn user -> IO.inspect user end)
+    result = Enum.map(users, fn {k, v} ->
+      if v.email == email do
+        v.id
+      end
+    end)
+    users[List.first(result)]
   end
 
   def add(u) do
@@ -12,8 +17,6 @@ defmodule Betonmylife.UserStore do
       {:not_found} -> not_found_add(user)
       {:found, result} -> found_add(result, user)
     end
-
-    userStore = Store.fetch(:user)
   end
 
   def not_found_add(user) do
