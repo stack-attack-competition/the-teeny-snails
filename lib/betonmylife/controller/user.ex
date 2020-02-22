@@ -21,7 +21,6 @@ defmodule Betonmylife.User do
       {:not_found} -> send_resp(conn, 404, "User not found!")
       {:found, user} -> send_resp(conn, 200, Poison.encode!(user))
     end
-
   end
 
   post "/" do

@@ -12,39 +12,39 @@ defmodule Repository do
     end
   end
 
-  def update(type, uuid, resource) do
-    dataSet = Store.fetch(type)
-    current = Map.get(dataSet, uuid)
+def update(type, uuid, resource) do
+  dataSet = Store.fetch(type)
+  current = Map.get(dataSet, uuid)
+end
+
+def delete(type, key) do
+  case Store.get(type) do
+    {:not_found} -> {:not_found}
+    {:found, dataSet} ->
+      deletedUser = Map.get(dataSet, key)
+      dataSet = Map.delete(dataSet, key)
+      Store.set(type, dataSet)
+      {:deleted, deletedUser}
   end
 
-  def delete(type, key) do
-    case Store.get(type) do
-      {:not_found} -> {:not_found}
-      {:found, dataSet} ->
-        deletedUser = Map.get(dataSet, key)
-        dataSet = Map.delete(dataSet, key)
-        Store.set(type, dataSet)
-        {:deleted, deletedUser}
-    end
+end
 
+def add(type, resource) do
+  case Store.get(type) do
+    {:not_found} -> not_found_add(type, resource)
+    {:found, result} -> found_add(type, result, resource)
   end
+end
 
-  def add(type, resource) do
-    case Store.get(type) do
-      {:not_found} -> not_found_add(type, resource)
-      {:found, result} -> found_add(type, result, resource)
-    end
-  end
+def not_found_add(type, resource) do
+  dataSet = %{resource.id => resource}
+  Store.set(type, dataSet)
+  {:created, resource}
+end
 
-  def not_found_add(type, resource) do
-    dataSet = %{resource.id => resource}
-    Store.set(type, dataSet)
-    {:created, resource}
-  end
-
-  def found_add(type, result, resource) do
-    result = Map.put_new(result, resource.id, resource)
-    Store.set(type, result)
-    {:created, resource}
-  end
+def found_add(type, result, resource) do
+  result = Map.put_new(result, resource.id, resource)
+  Store.set(type, result)
+  {:created, resource}
+end
 end
