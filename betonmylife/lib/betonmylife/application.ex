@@ -16,7 +16,7 @@ defmodule Betonmylife.Application do
   defp opts do
     [
       strategy: :one_for_one,
-      name: MinimalServer.Supervisor
+      name: Betonmylife.Supervisor
     ]
   end
   #  def start(_type, _args) do
