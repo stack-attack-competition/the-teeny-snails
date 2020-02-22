@@ -14,8 +14,9 @@ defmodule Betonmylife.Auth do
   end
 
   post "/register" do
-    UserStore.add(UserDto.from_map(conn.body_params))
-    send_resp(conn, 200, "Success!")
+    user = User.from_dto(UserDto.from_map(conn.body_params))
+    UserStore.add(user)
+    send_resp(conn, 200, Poison.encode!(user))
   end
 
   match _ do
