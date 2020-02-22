@@ -14,9 +14,18 @@ defmodule Betonmylife.Auth do
   end
 
   post "/register" do
-    user = User.from_dto(UserDto.from_map(conn.body_params))
-    UserStore.add(user)
-    send_resp(conn, 200, Poison.encode!(user))
+    ud = UserDto.from_map(conn.body_params)
+    cond do
+      !UserStore.email_validation(ud.email) -> send_resp(conn, 409, "Email already taken")
+      true ->
+        case UserDto.create_validate(ud) do
+          {:error, result} -> send_resp(conn, 400, result)
+          _ ->
+            user = User.from_dto(ud)
+            UserStore.add(user)
+            send_resp(conn, 200, Poison.encode!(user))
+        end
+    end
   end
 
   match _ do
