@@ -27,8 +27,7 @@ defmodule Betonmylife.Endpoint do
       Plug.Adapters.Cowboy.http(__MODULE__, [], config)
     end
   end
-
-  forward("/hello", to: Betonmylife.Router)
+  
   forward("/auth", to: Betonmylife.Auth)
   forward("/users", to: Betonmylife.User)
   forward("/bets", to: Betonmylife.Bet)
