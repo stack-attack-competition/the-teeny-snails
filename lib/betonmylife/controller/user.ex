@@ -9,35 +9,36 @@ defmodule Betonmylife.User do
 
 
   get "/" do
-    send_resp(conn, 200, Poison.encode!(UserRepository.fetchAll()))
+    case Repository.fetchAll(:user) do
+      {:not_found} -> send_resp(conn, 200, Poison.encode!([]))
+      {:found, user} -> send_resp(conn, 200, Poison.encode!(user))
+    end
   end
 
   get "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    IO.inspect uuid
-    IO.inspect UserRepository.fetchById(uuid)
-    send_resp(conn, 200, Poison.encode!(UserRepository.fetchById(uuid)))
+    case Repository.fetchById(:user, uuid) do
+      {:not_found} -> send_resp(conn, 404, "User not found!")
+      {:found, user} -> send_resp(conn, 200, Poison.encode!(user))
+    end
+
   end
 
   post "/" do
     user = User.from_dto(UserDto.from_map(conn.body_params))
-    UserRepository.add(user)
-    send_resp(conn, 200, Poison.encode!(user))
+    case Repository.add(:user, user) do
+      {:created, user} -> send_resp(conn, 200, Poison.encode!(user))
+      _ -> send_resp(conn, 500, 'Something went very wrong on our side!')
+    end
   end
 
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    IO.inspect uuid
-    IO.inspect UserRepository.fetchById(uuid)
-    UserRepository.deleteById(uuid)
-    send_resp(conn, 200, "Succes")
+    case Repository.delete(:user, uuid) do
+      {:not_found} -> send_resp(conn, 404, "User not found")
+      {:deleted, user} -> send_resp(conn, 200, Poison.encode!(user))
+    end
   end
-
-#  post "/" do
-#    u = UserDto.from_map(conn.body_params)
-#    IO.inspect u.email
-#    send_resp(conn, 200, "Success!")
-#  end
 
   match _ do
     send_resp(conn, 404, "Requested page not found!")

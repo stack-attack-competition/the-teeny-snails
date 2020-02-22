@@ -2,13 +2,26 @@ defmodule Repository do
   alias Betonmylife.Store
 
   def fetchAll(type) do
-    Store.fetch(type)
+    Store.get(type)
+  end
+
+  def fetchById(type, uuid) do
+    case Store.get(type) do
+      {:not_found} -> {:not_found}
+      {:found, dataSet} -> Map.get(dataSet, uuid)
+    end
   end
 
   def delete(type, key) do
-    dataSet = Store.fetch(type)
-    Map.delete(dataSet, key)
-    Store.set(type, dataSet)
+    case Store.get(type) do
+      {:not_found} -> {:not_found}
+      {:found, dataSet} ->
+        deletedUser = Map.get(dataSet, key)
+        dataSet = Map.delete(dataSet, key)
+        Store.set(type, dataSet)
+        {:deleted, deletedUser}
+    end
+
   end
 
   def add(type, resource) do
@@ -19,11 +32,14 @@ defmodule Repository do
   end
 
   def not_found_add(type, resource) do
-    Store.set(type, %{resource.id => resource})
+    dataSet = %{resource.id => resource}
+    Store.set(type, dataSet)
+    {:created, resource}
   end
 
   def found_add(type, result, resource) do
     result = Map.put_new(result, resource.id, resource)
-    Store.set(type,  result)
+    Store.set(type, result)
+    {:created, resource}
   end
 end
