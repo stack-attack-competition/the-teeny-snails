@@ -19,8 +19,8 @@ defmodule Betonmylife.Endpoint do
     }
   end
 
-  def start_link(_opts) do
-    Plug.Adapters.Cowboy2.http(__MODULE__, [])
+  def start_link(_opts \\ []) do
+    Plug.Adapters.Cowboy.http(__MODULE__, [])
   end
 
   #  def child_spec(opts) do

@@ -61,7 +61,7 @@ defmodule Betonmylife.Store do
 
 #  get the time-to-live value of the key
   def get_ttl(key) do
-    GenServer.call(__MODULE, {:get_ttl, key})
+    GenServer.call(__MODULE__, {:get_ttl, key})
   end
 
 # background handlers of the GenServer
@@ -81,11 +81,11 @@ defmodule Betonmylife.Store do
   def handle_call({:set, key, value}, _from, state) do
     %{ets_table_name: ets_table_name} = state
     cancel_timer(key, state)
-    true = :ets.insert(ets_table_name, {key, value})
+    result = :ets.insert(ets_table_name, {key, value})
     {:reply, result, state}
   end
 
-  def handle_call({:set, key, value}, _from, state) do
+  def handle_call({:set, key, value, expiration}, _from, state) do
     %{ets_table_name: ets_table_name} = state
     cancel_timer(key, state)
     timer_ref = Process.send_after(__MODULE__, {:delete, key}, expiration)
@@ -93,7 +93,7 @@ defmodule Betonmylife.Store do
     |> Map.get(:timer_refs)
     |> Map.put(key, timer_ref)
     state = state |> Map.put(:timer_refs, new_timer_refs)
-    true = :ets.insert(ets_table_name, {key, value})
+    result = :ets.insert(ets_table_name, {key, value})
     {:reply, result, state}
   end
 
@@ -110,7 +110,7 @@ defmodule Betonmylife.Store do
     {:reply, result, state}
   end
 
-  def handle_call({:get_ttl, key}, _from, sate) do
+  def handle_call({:get_ttl, key}, _from, state) do
     result = Process.read_timer(state.timer_refs[key])
     {:reply, result, state}
   end
