@@ -6,7 +6,12 @@ defmodule Betonmylife.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
+#    Storage.new()
+
+
     children = [
+      worker(Betonmylife.Store, []),
       # Starts a worker by calling: Betonmylife.Worker.start_link(arg)
       # {Betonmylife.Worker, arg}
     ]
@@ -16,4 +21,8 @@ defmodule Betonmylife.Application do
     opts = [strategy: :one_for_one, name: Betonmylife.Supervisor]
     Supervisor.start_link(children, opts)
   end
+end
+
+defmodule Storage do
+  use KVX.Bucket
 end
