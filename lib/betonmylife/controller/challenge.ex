@@ -25,7 +25,7 @@ defmodule Betonmylife.Challenge do
 
   get "/:uuid/bets" do
     uuid = Map.get(conn.params, "uuid")
-    case Repository.filterBy(:bet, '', uuid) do
+    case Repository.filterBy(:bet, "challenge", uuid) do
       {:not_found} -> send_resp(conn, 404, "Challenge not found!")
       {:found, challenge} -> send_resp(conn, 200, Poison.encode!(challenge))
     end

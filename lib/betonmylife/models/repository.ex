@@ -18,7 +18,9 @@ defmodule Repository do
 
   def filterBy(type, key, val) do
     dataSet = Store.fetch(type)
-    Enum.filter(dataSet, fn d -> Map.get(d, key) == val end)
+    {:found, Enum.filter(Enum.map(dataSet, fn {k, v} -> v end), fn v ->
+      v.challenge == val
+    end)}
   end
 
 
