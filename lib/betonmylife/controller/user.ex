@@ -31,6 +31,15 @@ defmodule Betonmylife.User do
     end
   end
 
+  patch "/:uuid" do
+    uuid = Map.get(conn.params, "uuid")
+    data = UserDto.from_map(conn.body_params)
+    case UserRepository.update(uuid, data) do
+      {:ok, result} -> send_resp(conn, 200, Poison.encode!(result))
+      {:error} -> send_resp(conn, 400, "Invalid user update")
+    end
+  end
+
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
     case Repository.delete(:user, uuid) do
