@@ -1,4 +1,4 @@
-defmodule Betonmylife.User do
+defmodule Betonmylife.Bet do
   use Plug.Router
   alias Betonmylife.BetRepository
 
@@ -25,7 +25,7 @@ defmodule Betonmylife.User do
 
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    BetRepository.deleteById(uuid)
+    BetRepository.delete(uuid)
     send_resp(conn, 200, "Succes")
   end
 
