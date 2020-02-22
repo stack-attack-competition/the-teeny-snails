@@ -22,10 +22,12 @@ defmodule Betonmylife.Endpoint do
   end
 
   def start_link(_opts \\ []) do
-    Logger.info("Starting server at http://localhost:4000/")
-    Plug.Adapters.Cowboy.http(__MODULE__, [])
+    with {:ok, [port: port] = config} <- Application.fetch_env(:betonmylife, __MODULE__) do
+      Logger.info("Starting server at http://localhost:#{port}/")
+      Plug.Adapters.Cowboy.http(__MODULE__, [], config)
+    end
   end
-
+  
   forward("/hello", to: Betonmylife.Router)
   forward("/auth", to: Betonmylife.Auth)
 
