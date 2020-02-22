@@ -1,5 +1,6 @@
 defmodule Betonmylife.Auth do
   use Plug.Router
+  alias Betonmylife.UserStore
 
   plug(:match)
   plug(:dispatch)
@@ -7,12 +8,12 @@ defmodule Betonmylife.Auth do
   @content_type "application/json"
 
   post "/login" do
+    LoginDto.from_map(conn.body_params)
     send_resp(conn, 200, "Success!")
   end
 
   post "/register" do
-    u = UserDto.from_map(conn.body_params)
-    IO.inspect u.email
+    UserStore.add(UserDto.from_map(conn.body_params))
     send_resp(conn, 200, "Success!")
   end
 

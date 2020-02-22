@@ -18,6 +18,17 @@ defmodule User do
   firstName: "",
   lastName: "",
   pictureUrl: ""
+
+  def from_dto(dto) do
+    %User{
+      id: UUID.uuid4(),
+      email: dto.email,
+      password: dto.password,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      pictureUrl: dto.pictureUrl
+    }
+  end
 end
 
 defmodule Bet do

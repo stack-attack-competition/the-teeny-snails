@@ -27,11 +27,10 @@ defmodule Betonmylife.Endpoint do
       Plug.Adapters.Cowboy.http(__MODULE__, [], config)
     end
   end
-  
+
   forward("/hello", to: Betonmylife.Router)
   forward("/auth", to: Betonmylife.Auth)
   forward("/users", to: Betonmylife.User)
-
 
   match _ do
     send_resp(conn, 404, "Requested page not found!")
