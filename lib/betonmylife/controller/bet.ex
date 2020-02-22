@@ -10,18 +10,26 @@ defmodule Betonmylife.Bet do
 
 
   get "/" do
-    send_resp(conn, 200, Poison.encode!(Repository.fetchAll(:bet)))
+    case Repository.fetchAll(:bet) do
+      {:not_found} -> send_resp(conn, 200, Poison.encode!([]))
+      {:found, bet} -> send_resp(conn, 200, Poison.encode!(bet))
+    end
   end
 
   get "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    send_resp(conn, 200, Poison.encode!(BetRepository.fetchById(uuid)))
+    case Repository.fetchById(:bet, uuid) do
+      {:not_found} -> send_resp(conn, 404, "Bet not found!")
+      {:found, bet} -> send_resp(conn, 200, Poison.encode!(bet))
+    end
   end
 
   post "/" do
     bet = Bet.from_dto(BetDto.from_map(conn.body_params))
-    Repository.add(:bet, bet)
-    send_resp(conn, 200, Poison.encode!(bet))
+    case Repository.add(:bet, bet) do
+      {:created, bet} -> send_resp(conn, 200, Poison.encode!(bet))
+      _ -> send_resp(conn, 500, 'Something went very wrong on our side!')
+    end
   end
 
   patch "/:uuid" do
@@ -29,14 +37,16 @@ defmodule Betonmylife.Bet do
     data = BetDto.from_map(conn.body_params)
     case BetRepository.update(uuid, data) do
       {:ok, result} -> send_resp(conn, 200, Poison.encode!(result))
-      {:error} -> send_resp(conn, 400, "error")
+      {:error} -> send_resp(conn, 400, "Invalid bet update")
     end
   end
 
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    Repository.delete(:bet, uuid)
-    send_resp(conn, 200, "Succes")
+    case Repository.delete(:bet, uuid) do
+      {:not_found} -> send_resp(conn, 404, "Bet not found")
+      {:deleted, bet} -> send_resp(conn, 200, Poison.encode!(bet))
+    end
   end
 
   match _ do

@@ -8,7 +8,11 @@ defmodule Repository do
   def fetchById(type, uuid) do
     case Store.get(type) do
       {:not_found} -> {:not_found}
-      {:found, dataSet} -> Map.get(dataSet, uuid)
+      {:found, dataSet} ->
+        case Map.get(dataSet, uuid) do
+          nil -> {:not_found}
+          result -> {:found, result}
+        end
     end
   end
 

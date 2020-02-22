@@ -5,10 +5,10 @@ defmodule Betonmylife.BetRepository do
     case Store.get(:bet) do
       {:found, bets} ->
         bet = Map.get(bets, uuid)
-        new = Bet.update(bet, data)
-        newBets = Map.replace!(bets, uuid, new)
+        result = Bet.update(bet, data)
+        newBets = Map.replace!(bets, uuid, result)
         Store.set(:bet, newBets)
-        {:ok, new}
+        {:ok, result}
       _ -> {:error}
     end
   end
