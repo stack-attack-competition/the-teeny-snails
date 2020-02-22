@@ -31,7 +31,7 @@ defmodule Betonmylife.Endpoint do
   forward("/auth", to: Betonmylife.Auth)
   forward("/users", to: Betonmylife.User)
   forward("/bets", to: Betonmylife.Bet)
-  forward("/challeneges", to: Betonmylife.Challenge)
+  forward("/challenges", to: Betonmylife.Challenge)
 
   match _ do
     send_resp(conn, 404, "Requested page not found!")

@@ -9,7 +9,7 @@ defmodule Betonmylife.Challenge do
 
 
   get "/" do
-    case Repository.fetchAll(:challenege) do
+    case Repository.fetchAll(:challenge) do
       {:not_found} -> send_resp(conn, 200, Poison.encode!([]))
       {:found, challenge} -> send_resp(conn, 200, Poison.encode!(challenge))
     end
@@ -17,7 +17,10 @@ defmodule Betonmylife.Challenge do
 
   get "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    send_resp(conn, 200, Repository.fetchById(:challenege, 'challenge', uuid))
+    case Repository.fetchById(:challenge, uuid) do
+      {:not_found} -> send_resp(conn, 404, "Bet not found!")
+      {:found, bet} -> send_resp(conn, 200, Poison.encode!(bet))
+    end
   end
 
   get "/:uuid/bets" do
@@ -29,8 +32,8 @@ defmodule Betonmylife.Challenge do
   end
 
   post "/" do
-    user = User.from_dto(UserDto.from_map(conn.body_params))
-    case Repository.add(:challenege, user) do
+    challenge = Challenge.from_dto(ChallengeDto.from_map(conn.body_params))
+    case Repository.add(:challenge, challenge) do
       {:created, challenge} -> send_resp(conn, 200, Poison.encode!(challenge))
       _ -> send_resp(conn, 500, 'Something went very wrong on our side!')
     end
@@ -47,7 +50,7 @@ defmodule Betonmylife.Challenge do
   
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
-    case Repository.delete(:challenege, uuid) do
+    case Repository.delete(:challenge, uuid) do
       {:not_found} -> send_resp(conn, 404, "Challenge not found")
       {:deleted, challenge} -> send_resp(conn, 200, Poison.encode!(challenge))
     end
