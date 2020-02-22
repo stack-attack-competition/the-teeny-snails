@@ -12,13 +12,6 @@ defmodule Betonmylife.Application do
     Supervisor.start_link(children, opts())
   end
 
-#  defp children do
-#    [
-#      supervisor(Betonmylife.Endpoint),
-#      worker(Betonmylife.Store),
-#    ]
-#  end
-
   defp opts do
     [
       strategy: :one_for_one,
