@@ -22,7 +22,7 @@ defmodule Betonmylife.Endpoint do
   end
 
   def start_link(_opts \\ []) do
-    with {:ok, [port: port] = config} <- Application.fetch_env(:betonmylife_server, __MODULE__) do
+    with {:ok, [port: port] = config} <- Application.fetch_env(:betonmylife, __MODULE__) do
       Logger.info("Starting server at http://localhost:#{port}/")
       Plug.Adapters.Cowboy.http(__MODULE__, [], config)
     end

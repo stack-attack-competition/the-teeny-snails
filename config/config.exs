@@ -1,1 +1,3 @@
-config :betonmylife_server, Betonmylife.Endpoint, port: 4000
+use Mix.Config
+
+config :betonmylife, Betonmylife.Endpoint, port: 4000
