@@ -71,6 +71,17 @@ defmodule UserDto do
       pictureUrl: data["pictureUrl"]
     }
   end
+
+  def create_validate(user) do
+    cond do
+      user.email == nil -> {:error, "Email missing"}
+      user.password == nil -> {:error, "Password missing"}
+      user.firstName == nil -> {:error, "First name missing"}
+      user.lastName == nil -> {:error, "Last name missing"}
+      user.pictureUrl == nil -> {:error, "Picture URL missing"}
+      true -> {:ok}
+    end
+  end
 end
 
 defmodule ChallengeDto do
