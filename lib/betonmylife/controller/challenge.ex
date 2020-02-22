@@ -23,11 +23,6 @@ defmodule Betonmylife.Challenge do
     end
   end
 
-#  get "/:uuid" do
-#    uuid = Map.get(conn.params, "uuid")
-#    send_resp(conn, 200, Poison.encode!(ChallengeRepository.fetchById(uuid)))
-#  end
-
   post "/" do
     user = User.from_dto(UserDto.from_map(conn.body_params))
     case Repository.add(:challenege, user) do
@@ -44,13 +39,7 @@ defmodule Betonmylife.Challenge do
       {:error} -> send_resp(conn, 400, "Invalid challenge update")
     end
   end
-
-#  post "/" do
-#    challenge = Challenge.from_dto(ChallengeDto.from_map(conn.body_params))
-#    ChallengeRepository.add(challenge)
-#    send_resp(conn, 200, Poison.encode!(challenge))
-#  end
-
+  
   delete "/:uuid" do
     uuid = Map.get(conn.params, "uuid")
     case Repository.delete(:challenege, uuid) do
@@ -58,12 +47,6 @@ defmodule Betonmylife.Challenge do
       {:deleted, challenge} -> send_resp(conn, 200, Poison.encode!(challenge))
     end
   end
-
-#  delete "/:uuid" do
-#    uuid = Map.get(conn.params, "uuid")
-#    ChallengeRepository.delete(uuid)
-#    send_resp(conn, 200, "Succes")
-#  end
 
   match _ do
     send_resp(conn, 404, "Requested page not found!")
