@@ -10,12 +10,6 @@ defmodule Betonmylife.Application do
       supervisor(Betonmylife.Endpoint, []),
     ]
     Supervisor.start_link(children, opts())
-
-    alias Betonmylife.Store
-
-    Store.set("test", "tes1231231t")
-    IO.puts Store.fetch("test")
-    IO.puts UUID.uuid4()
   end
 
 #  defp children do
