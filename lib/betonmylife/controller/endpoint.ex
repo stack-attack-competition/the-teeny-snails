@@ -30,6 +30,7 @@ defmodule Betonmylife.Endpoint do
   
   forward("/hello", to: Betonmylife.Router)
   forward("/auth", to: Betonmylife.Auth)
+  forward("/users", to: Betonmylife.User)
 
 
   match _ do
