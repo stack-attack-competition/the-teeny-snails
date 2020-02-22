@@ -2,6 +2,7 @@ defmodule Betonmylife.Store do
   use GenServer
   require Logger
 
+#  link the store into the children pool
   def start_link(opts \\ []) do
     Logger.debug("starting #{inspect __MODULE__}")
     GenServer.start_link(__MODULE__, [
@@ -10,6 +11,7 @@ defmodule Betonmylife.Store do
     ], [name: __MODULE__])
   end
 
+#  initialize the back storage
   def init(args) do
     [{:ets_table_name, ets_table_name}, {:log_limit, log_limit}] = args
     :ets.new(ets_table_name, [:named_table, :set, :private])
@@ -32,29 +34,37 @@ defmodule Betonmylife.Store do
     end
   end
 
+#  set an arbitrary value for the certain key
   def set(key, value) do
     GenServer.call(__MODULE__, {:set, key, value})
   end
 
+#  set an arbitrary value for the certain key with expiration
   def set(key, value, exp) do
     GenServer.call(__MODULE__, {:set, key, value, exp})
   end
 
+#  delete the key's value and unset the key
   def delete(key) do
     GenServer.call(__MODULE__, {:delete, key})
   end
 
+#  returns all of the saved key
   def keys() do
     GenServer.call(__MODULE__, {:get_all_keys})
   end
 
+#  totally wipe the background storage
   def clear() do
     GenServer.call(__MODULE__, {:clear})
   end
 
+#  get the time-to-live value of the key
   def get_ttl(key) do
     GenServer.call(__MODULE, {:get_ttl, key})
   end
+
+# background handlers of the GenServer
 
   def handle_call({:get, key}, _from, state) do
     %{ets_table_name: ets_table_name} = state
