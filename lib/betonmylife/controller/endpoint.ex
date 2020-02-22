@@ -27,6 +27,7 @@ defmodule Betonmylife.Endpoint do
   end
 
   forward("/hello", to: Betonmylife.Router)
+  forward("/auth", to: Betonmylife.Auth)
 
 
   match _ do

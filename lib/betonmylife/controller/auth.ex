@@ -1,4 +1,4 @@
-defmodule Betonmylife.Router do
+defmodule Betonmylife.Auth do
   use Plug.Router
 
   plug(:match)
@@ -6,16 +6,13 @@ defmodule Betonmylife.Router do
 
   @content_type "application/json"
 
-  get "/" do
-    conn
-    |> put_resp_content_type(@content_type)
-    |> send_resp(200, message())
+  post "/login" do
+    send_resp(conn, 200, "Success!")
   end
 
-  post "/asd" do
-    bet = BetDto.from_map(conn.body_params)
-    IO.inspect conn.body_params
-    IO.inspect bet
+  post "/register" do
+    u = UserDto.from_map(conn.body_params)
+    IO.inspect u.email
     send_resp(conn, 200, "Success!")
   end
 
