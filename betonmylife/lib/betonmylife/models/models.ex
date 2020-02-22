@@ -11,23 +11,23 @@ defmodule Challenge do
 end
 
 defmodule User do
-  defstruct id = "",
-  isDeleted = false,
-  email = "",
-  password = "",
-  firstName = "",
-  lastName = "",
-  pictureUrl = ""
+  defstruct id: "",
+  isDeleted: false,
+  email: "",
+  password: "",
+  firstName: "",
+  lastName: "",
+  pictureUrl: ""
 end
 
 defmodule Bet do
-  defstruct id = "",
-  isDeleted = false,
-  author = "",
-  challenge = "",
-  inFavor = "",
-  amount = 0,
-  result = 0
+  defstruct id: "",
+  isDeleted: false,
+  author: "",
+  challenge: "",
+  inFavor: "",
+  amount: 0,
+  result: 0
 end
 
 # Dto definitions
