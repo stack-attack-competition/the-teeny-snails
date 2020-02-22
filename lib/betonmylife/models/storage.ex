@@ -11,6 +11,19 @@ defmodule Betonmylife.UserStore do
     users[List.first(result)]
   end
 
+  def fetchAll() do
+    Store.fetch(:user)
+  end
+
+  def fetchById(uuid) do
+    {:found, users } = Store.get(:user)
+    Map.get(users, uuid)
+  end
+
+  def deleteById(uuid) do
+    Store.delete(uuid);
+  end
+
   def add(user) do
     case Store.get(:user) do
       {:not_found} -> not_found_add(user)

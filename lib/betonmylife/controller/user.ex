@@ -7,18 +7,37 @@ defmodule Betonmylife.User do
 
   @content_type "application/json"
 
-  post "/" do
 
-    newUser = UserDto.from_map(conn.body_params)
-    UserStore.add(newUser)
-    send_resp(conn, 200, Poison.encode!(newUser))
+  get "/" do
+    send_resp(conn, 200, Poison.encode!(UserStore.fetchAll()))
+  end
+
+  get "/:uuid" do
+    uuid = Map.get(conn.params, "uuid")
+    IO.inspect uuid
+    IO.inspect UserStore.fetchById(uuid)
+    send_resp(conn, 200, Poison.encode!(UserStore.fetchById(uuid)))
   end
 
   post "/" do
-    u = UserDto.from_map(conn.body_params)
-    IO.inspect u.email
-    send_resp(conn, 200, "Success!")
+    user = User.from_dto(UserDto.from_map(conn.body_params))
+    UserStore.add(user)
+    send_resp(conn, 200, Poison.encode!(user))
   end
+
+  delete "/:uuid" do
+    uuid = Map.get(conn.params, "uuid")
+    IO.inspect uuid
+    IO.inspect UserStore.fetchById(uuid)
+    UserStore.deleteById(uuid)
+    send_resp(conn, 200, "Succes")
+  end
+
+#  post "/" do
+#    u = UserDto.from_map(conn.body_params)
+#    IO.inspect u.email
+#    send_resp(conn, 200, "Success!")
+#  end
 
   match _ do
     send_resp(conn, 404, "Requested page not found!")
