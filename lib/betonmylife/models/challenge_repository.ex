@@ -1,20 +1,13 @@
 defmodule Betonmylife.ChallengeRepository do
-#  def add(challenege) do
-#    Repository.add(:challenege, challenege)
-#  end
-#
-#  def fetchById(uuid) do
-#    case Store.get(:challenege) do
-#      {:found, challenege} -> Map.get(challenege, uuid)
-#      _ -> nil
-#    end
-#  end
-#
-#  def fetchAll() do
-#    Repository.fetchAll(:challenege)
-#  end
-#
-#  def delete(key) do
-#    Repository.delete(:challenege, key)
-#  end
+  def update(uuid, data) do
+    case Store.get(:challenge) do
+      {:found, challenges} ->
+        challenge = Map.get(bets, uuid)
+        result = Challenge.update(bet, data)
+        newChallenges = Map.replace!(challenges, uuid, result)
+        Store.set(:bet, newChallenges)
+        {:ok, result}
+      _ -> {:error}
+    end
+  end
 end

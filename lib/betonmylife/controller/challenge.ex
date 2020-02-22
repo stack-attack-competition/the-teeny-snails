@@ -36,6 +36,15 @@ defmodule Betonmylife.Challenge do
     end
   end
 
+  patch "/:uuid" do
+    uuid = Map.get(conn.params, "uuid")
+    data = ChallengeDto.from_map(conn.body_params)
+    case ChallengeRepository.update(uuid, data) do
+      {:ok, result} -> send_resp(conn, 200, Poison.encode!(result))
+      {:error} -> send_resp(conn, 400, "Invalid challenge update")
+    end
+  end
+
 #  post "/" do
 #    challenge = Challenge.from_dto(ChallengeDto.from_map(conn.body_params))
 #    ChallengeRepository.add(challenge)
