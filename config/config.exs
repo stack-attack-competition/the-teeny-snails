@@ -1,0 +1,1 @@
+config :betonmylife_server, Betonmylife.Endpoint, port: 4000
