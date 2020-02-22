@@ -11,8 +11,7 @@ defmodule Betonmylife.UserStore do
     users[List.first(result)]
   end
 
-  def add(u) do
-    user = User.from_dto(u)
+  def add(user) do
     case Store.get(:user) do
       {:not_found} -> not_found_add(user)
       {:found, result} -> found_add(result, user)
